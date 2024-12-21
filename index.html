@@ -119,6 +119,9 @@
                 }
             }
         </style>
+        <script type="text/javascript"
+          src="https://d3eoax9i5htok0.cloudfront.net/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+        </script>
     </head>
     <body>
               <div class="wrapper">
@@ -206,10 +209,27 @@
 						Preprint
 					</li>
 
+
 					<li>
 <details>
 <summary>
-                        <a href="javascript:;"> p-Mean Regret for Stochastic Bandits </a>
+						<a href="http://arxiv.org/abs/2208.09449">On Exact Solutions of the Inner Optimization Problem of Adversarial Robustness</a>
+</summary>
+<p>
+<em>
+    We propose a robust framework that uses adversarially robust training to safeguard the ML models against perturbed testing data. Our contributions can be seen from both computational and statistical perspectives. Firstly, from a computational/optimization point of view, we derive the ready-to-use exact solution for several widely used loss functions with a variety of norm constraints on adversarial perturbation for various supervised and unsupervised ML problems, including regression, classification, two-layer neural networks, graphical models, and matrix completion. The solutions are either in closed-form, or an easily tractable optimization problem such as 1-D convex optimization, semidefinite programming, difference of convex programming or a sorting-based algorithm. Secondly, from statistical/generalization viewpoint, using some of these results, we derive novel bounds of the adversarial Rademacher complexity for various problems, which entails new generalization bounds. Thirdly, we perform some sanity-check experiments on real world datasets for supervised problems such as regression and classification, as well as for unsupervised problems such as matrix completion and learning graphical models.
+</em>
+</p>
+</details>
+						<br>
+						Deepak Maurya, Adarsh Barik, Jean Honorio<br>
+						Accepted, ICASSP 2025
+					</li>
+
+					<li>
+<details>
+<summary>
+                        <a href="https://arxiv.org/abs/2412.10751"> p-Mean Regret for Stochastic Bandits </a>
                         </summary>
 <p>
 <em>
@@ -227,12 +247,12 @@ In the case of Nash regret (the limit as $p$ approaches zero), our unified appro
                     <li>
 <details>
 <summary>
-                                <a href="#" onclick="return false;"> An SDP Formulation for Minimizing p-th Order Controversy with Unknown Initial Opinions
+                                <a href="https://www.cs.purdue.edu/homes/jhonorio/controversy_cn24.pdf" onclick="return false;"> An SDP Formulation for Minimizing p-th Order Controversy with Unknown Initial Opinions
          </a>
 </summary>
 <p>
 <em>
-    To be updated!
+    In this paper, we investigate the problem of minimizing $p$-th order controversy within a network, assuming a framework of opinion evolution based on the well-established Friedkin-Johnsen (FJ) model. We define $p$-th order controversy as $f_p(L) = s^T (I+L)^{-p} s$, where $s$ represents the vector of users’ fixed albeit undisclosed initial opinions, $I$ is the identity matrix, and $L$ is the graph Laplacian associated with the underlying network. Notably, for the case of $p = 1$, this function transforms into the widely recognized polarization-disagreement index, and for $p = 2$, it aligns with the standard polarization. We focus on minimizing $f_p(L)$ within a novel and realistic framework, where users’ initial opinions $s$ are undisclosed. Due to the undisclosed nature of users’ initial opinions, achieving the exact minimization of $f_p(L)$ proves unattainable within our innovative and practical framework. To address this challenge, we introduce a novel semidefinite programming formulation designed to enable the minimization of the upper bound of $f_p(L)$ without the need for knowledge of initial opinions. Furthermore, our empirical findings demonstrate its effectiveness, surpassing current state-of-the-art methodologies.
 </em>
 </p>
 </details>
