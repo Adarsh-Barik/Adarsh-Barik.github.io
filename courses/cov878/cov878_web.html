@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="Instructor: Adarsh Barik Credit: 1 (1-0-0) Semester 1 (2025-2026)" />
+  <title>COV878: Special Module in Machine Learning</title>
+  <style type="text/css">
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <link rel="stylesheet" href="simple.css" />
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">COV878: Special Module in Machine Learning</h1>
+<p class="author">Instructor: Adarsh Barik<br />
+Credit: 1 (1-0-0)<br />
+Semester 1 (2025-2026)</p>
+</header>
+<p>COV878 is a 1-Credit Special Module in Machine Learning. This is a <em>seminar-style course</em> which explores the statistical foundations of machine learning, specifically in the finite sample regime. The primary objective is to rigorously analyze the performance of learning algorithms by examining their generalization ability, sample complexity, and convergence properties.</p>
+<h1 id="who-should-take-the-course" class="unnumbered">Who should take the course?</h1>
+<p>This course is intended for <strong>(post)graduate and advanced undergraduate students</strong> interested in the theoretical foundations of machine learning. PhD students specializing in machine learning are particularly encouraged to integrate the concepts learned here into their research. A basic level of mathematical maturity is expected; students with concerns about their background should consult the instructor.</p>
+<h1 id="expected-background" class="unnumbered">Expected background</h1>
+<p>A basic understanding of probability theory, linear algebra, and calculus is required for this course. Prior experience or familiarity with machine learning is also beneficial, though not mandatory.</p>
+<h1 id="learning-outcomes" class="unnumbered">Learning outcomes</h1>
+<p>Upon completing this course, students will be familiar with key concepts and proof techniques from statistical learning theory, information theory, and optimization, enabling them to:</p>
+<ol>
+<li><p>Derive generalization bounds for learning problems</p></li>
+<li><p>Analyze the sample complexity of learning algorithms</p></li>
+<li><p>Understand convergence rates of learning algorithms</p></li>
+</ol>
+<h1 id="content" class="unnumbered">Content</h1>
+<p>This course will primarily focus on the non-asymptotic analysis of learning algorithms. Key topics include concentration bounds, empirical risk minimization, PAC-Bayes theory, Rademacher and Gaussian complexity measures, Karush-Kuhn-Tucker (KKT) conditions, primal-dual witness techniques, convergence rates, restricted strong convexity, and Fano’s inequality, among others.</p>
+<h1 id="course-plan" class="unnumbered">Course plan</h1>
+<ul>
+<li><p><strong>Deliverables from the instructor:</strong> This will be a seminar-type 1-credit module. I will cover one topic over the course of one to two lectures. The students are expected to do some background reading on the topics covered in the class. The plan is to cover most of the topics before mid-term (2-3 hours a week for the first 5-6 weeks).</p></li>
+<li><p><strong>Deliverables from the students:</strong></p>
+<ol>
+<li><p>Each student is expected to conduct a paper review, prepare a summary, and deliver a classroom presentation. While the paper summary and presentation are due after the mid-term, students are encouraged to begin working on them from the very onset of the course.</p></li>
+<li><p>Each student will also be responsible for scribing one lecture, with the scribe due within one week of the lecture date.</p></li>
+<li><p>There will be no traditional exams. Final grades will be determined by the quality of the paper summary, presentation, lecture scribing, and class participation.</p></li>
+<li><p>Attendance is mandatory and will count towards class participation.</p></li>
+</ol></li>
+</ul>
+<h1 id="grading" class="unnumbered">Grading</h1>
+<table>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Scribe</td>
+<td style="text-align: left;">20%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Paper summary report</td>
+<td style="text-align: left;">20%</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Presentation</td>
+<td style="text-align: left;">40%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">In-class participation</td>
+<td style="text-align: left;">20%</td>
+</tr>
+</tbody>
+</table>
+<h2 id="scribe" class="unnumbered">Scribe</h2>
+<ul>
+<li><p>Each student will be assigned a lecture to scribe.</p></li>
+<li><p>Scribing must be done in LaTeX. The required template file can be found <a href="template/scribe_template.tex">here</a>. Students can also refer to the <a href="template/lec1_markov_applications.tex">LaTex source code for the first lecture.</a></p></li>
+</ul>
+<h2 id="paper-summary-report" class="unnumbered">Paper Summary Report</h2>
+<p>Paper summary report will provide a summary of the paper. The report must include the following headers:</p>
+<ol>
+<li><p>Summary of the contributions</p></li>
+<li><p>Strengths</p></li>
+<li><p>Weaknesses</p></li>
+<li><p>Main results</p></li>
+<li><p>Challenges and technical innovations in the analysis</p></li>
+<li><p>Open questions</p></li>
+</ol>
+<h2 id="in-class-participation" class="unnumbered">In-class participation</h2>
+<ul>
+<li><p>The grade for in-class participation will be based on both attendance and active engagement in class discussions.</p></li>
+<li><p>The first five minutes of each lecture will be devoted to reviewing the summary and unsolved exercises from the previous lecture, providing an opportunity for students to contribute to the discussion.</p></li>
+</ul>
+<h1 id="collaboration-and-use-of-ai-tools" class="unnumbered">Collaboration and use of AI Tools</h1>
+<ul>
+<li><p>Collaboration and discussion among students are strongly encouraged. However, all deliverables (including the scribed lecture, paper summary report, and presentation) will be graded individually. You may acknowledge your collaborators by including their names in the acknowledgement section.</p></li>
+<li><p>Plagiarism in any form (including the use of AI tools) is strictly prohibited. Any violation of this policy will result in a score of <span class="math inline">0</span> for the entire course.</p></li>
+</ul>
+<h1 id="some-important-deadlines" class="unnumbered">Some Important Deadlines</h1>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;"><strong>Lecture</strong></th>
+<th style="text-align: left;"><strong>Topic</strong></th>
+<th style="text-align: left;"><strong>Remark</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+    <td style="text-align: left;"><a href="lectures/lec1_markov_applications.pdf">Lecture 1</a></td>
+<td style="text-align: left;">Markov’s Inequality and Applications</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Lecture 2</td>
+<td style="text-align: left;">Hoeffding’s Inequality and Applications</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Lecture 3</td>
+<td style="text-align: left;">Fano’s Inequality and Applications</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Lecture 4</td>
+<td style="text-align: left;">(TBD)</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Lecture 5</td>
+<td style="text-align: left;">(TBD)</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Lecture 6</td>
+<td style="text-align: left;">(TBD)</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Lecture 7</td>
+<td style="text-align: left;">(TBD)</td>
+<td style="text-align: left;"><em>Review paper – title and abstract due</em></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Lecture 8</td>
+<td style="text-align: left;">(TBD)</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Lecture 9</td>
+<td style="text-align: left;">(TBD)</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Lecture 10</td>
+<td style="text-align: left;">(TBD)</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Lecture 11</td>
+<td style="text-align: left;">(TBD)</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Lecture 12</td>
+<td style="text-align: left;">(TBD)</td>
+<td style="text-align: left;"><em>Paper summary report due</em></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Lecture 13</td>
+<td style="text-align: left;">Final Presentation</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Lecture 14</td>
+<td style="text-align: left;">Final Presentation</td>
+<td style="text-align: left;"></td>
+</tr>
+</tbody>
+</table>
+<p>Scribe is due within one week of the lecture date.</p>
+<h1 id="reference-reading-materials" class="unnumbered">Reference Reading Materials</h1>
+<div id="refs" class="references">
+<div id="ref-cover1999elements">
+<p>Cover, Thomas M. 1999. <em>Elements of Information Theory</em>. John Wiley &amp; Sons.</p>
+</div>
+<div id="ref-duchi2009efficient">
+<p>Duchi, John, and Yoram Singer. 2009. “Efficient Online and Batch Learning Using Forward Backward Splitting.” <em>The Journal of Machine Learning Research</em> 10: 2899–2934.</p>
+</div>
+<div id="ref-germain2015risk">
+<p>Germain, Pascal, Alexandre Lacasse, Francois Laviolette, Mario Marchand, and Jean-Francis Roy. 2015. “Risk Bounds for the Majority Vote: From a Pac-Bayesian Analysis to a Learning Algorithm.” <em>Journal of Machine Learning Research (JMLR)</em>.</p>
+</div>
+<div id="ref-kakade2008complexity">
+<p>Kakade, Sham M, Karthik Sridharan, and Ambuj Tewari. 2008. “On the Complexity of Linear Prediction: Risk Bounds, Margin Bounds, and Regularization.” <em>Advances in Neural Information Processing Systems</em> 21.</p>
+</div>
+<div id="ref-mcallester2007generalization">
+<p>McAllester, David. 2007. “Generalization Bounds and Consistency.” <em>Predicting Structured Data</em>, 247–61.</p>
+</div>
+<div id="ref-negahban2012unified">
+<p>Negahban, Sahand N, Pradeep Ravikumar, Martin J Wainwright, and Bin Yu. 2012. “A Unified Framework for High-Dimensional Analysis of M-Estimators with Decomposable Regularizers.” <em>Advances in Neural Information Processing Systems</em>.</p>
+</div>
+<div id="ref-raskutti2010restricted">
+<p>Raskutti, Garvesh, Martin J Wainwright, and Bin Yu. 2010. “Restricted Eigenvalue Properties for Correlated Gaussian Designs.” <em>The Journal of Machine Learning Research</em> 11: 2241–59.</p>
+</div>
+<div id="ref-tropp2012user">
+<p>Tropp, Joel A. 2012. “User-Friendly Tail Bounds for Sums of Random Matrices.” <em>Foundations of Computational Mathematics</em> 12 (4): 389–434.</p>
+</div>
+<div id="ref-wainwright2009sharp">
+<p>Wainwright, Martin J. 2009. “Sharp Thresholds for High-Dimensional and Noisy Sparsity Recovery Using L1-Constrained Quadratic Programming (Lasso).” <em>IEEE Transactions on Information Theory</em> 55 (5): 2183–2202.</p>
+</div>
+<div id="ref-wainwright2019high">
+<p>Wainwright, Martin J. 2019. "High-Dimensional Statistics: A Non-Asymptotic Viewpoint". <em>Cambridge university press.</em></p>
+</div>
+</div>
+</body>
+</html>

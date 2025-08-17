@@ -1,0 +1,133 @@
+\documentclass[11pt]{article}
+
+% ---- Packages ----
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{microtype}
+\usepackage{geometry}
+\usepackage{fancyhdr}
+\usepackage{sectsty}
+
+\usepackage{libertine}
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{mathtools}
+\mathtoolsset{showonlyrefs}
+
+% nice looking math and font
+\usepackage{palatino}
+\usepackage{mathpazo}
+
+% For links and references
+\usepackage{hyperref}
+\usepackage{xcolor}
+\definecolor{darkblue}{rgb}{0.0,0.0,0.65}
+\definecolor{darkred}{rgb}{0.68,0.05,0.0}
+\definecolor{darkgreen}{rgb}{0.0,0.29,0.29}
+\definecolor{darkpurple}{rgb}{0.47,0.09,0.29}
+\definecolor{darkpink}{rgb}{0.9,0.17,0.31}
+
+\hypersetup{
+   colorlinks = true,
+   citecolor  = darkblue,
+   linkcolor  = darkpink,
+   filecolor  = darkgreen,
+   urlcolor   = darkpink,
+ }
+
+% for generating random text
+\usepackage{lipsum}
+
+
+% FILL REQUIRED INFO
+\newcommand{\yourname}{Adarsh Barik} % your name
+\newcommand{\lectnum}{1} % Lecture number
+\newcommand{\lectdate}{August 14,2025} % Lecture date
+
+% DO NOT CHANGE THIS - START
+
+% ---- Page Setup ----
+\geometry{letterpaper, margin=1in}
+\setlength{\parskip}{0.8em}
+\setlength{\parindent}{0pt}
+
+% ---- Fonts ----
+\renewcommand{\sfdefault}{phv} % helvetica-like
+\renewcommand{\rmdefault}{ptm} % times-like
+
+% ---- Section style (NeurIPS inspired) ----
+\sectionfont{\Large\bfseries}
+\subsectionfont{\normalsize\bfseries}
+
+% ---- Header/Footer ----
+\pagestyle{fancy}
+\fancyhf{} % clear all
+
+% Left header: Instructor + Scriber
+\lhead{\textbf{Instructor:} Adarsh Barik\\\textbf{Scribed by:} \yourname{}}
+
+% Right header: Course + Date
+\rhead{Lecture \lectnum{}, COV878\\\today}
+
+% Center footer: page number
+\cfoot{\thepage}
+
+% ---- Title ----
+\newcommand{\scribetitle}[1]{
+  \begin{center}
+    {\LARGE \textsc{Lecture \lectnum{}: #1}} % smart caps
+  \end{center}
+  \vspace{1em}
+  \vskip -\parskip
+  \hrule 
+  \vskip 0.09in%
+}
+
+\AtEndDocument{%
+  % Place disclaimer at absolute bottom of final page (flush to bottom)
+  \vspace*{\fill}
+  \noindent%
+  \color{gray}
+  \rule{\linewidth}{0.5pt}
+  \smallskip
+  \textbf{Disclaimer:} These notes have not been scrutinized with the level of rigor usually applied to formal publications. Readers should verify the results before use.
+}
+
+% DO NOT CHANGE THIS - END
+
+% Used Defined Packages
+
+% ---- Document ----
+\begin{document}
+
+\scribetitle{Scribe notes for Special Module in Machine Learning}
+
+\section{Introduction}
+\lipsum[1]
+
+\section{Main Results}
+\lipsum[2]
+
+\subsection{Example subsection}
+Some math:  
+\begin{align}
+    \label{eq:regret}
+    R_T = \sum_{t=1}^T \ell_t(w_t) - \min_{w \in \mathcal{W}} \sum_{t=1}^T \ell_t(w)~.
+\end{align}
+
+Some other equation:
+\begin{align}
+    \label{eq:emc2}
+    E = mc^2~.
+\end{align}
+
+Note that the equation number is only shown when the equation, for example \eqref{eq:regret}, is referred to.
+
+
+\section{Discussion}
+\lipsum[3]
+
+\section{Conclusion}
+\lipsum[4]
+
+\end{document}
