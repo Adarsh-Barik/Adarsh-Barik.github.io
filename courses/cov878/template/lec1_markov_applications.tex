@@ -290,13 +290,13 @@ Lemma~\ref{lem:union bound} along with Theorem~\ref{thm: one sided gaussian boun
 \begin{proof}
     \begin{align}
         \prob{\abs{\frac{1}{n} \sum_{i=1}^n x_i} \leq \epsilon} &= \prob{ \frac{1}{n} \sum_{i=1}^n x_i \leq \epsilon \; \text{and}\; \frac{1}{n} \sum_{i=1}^n x_i \geq -\epsilon} \\
-        &= 1 - \prob{ \frac{1}{n} \sum_{i=1}^n x_i < \epsilon \; \text{or}\; \frac{1}{n} \sum_{i=1}^n x_i > -\epsilon}
+        &= 1 - \prob{ \frac{1}{n} \sum_{i=1}^n x_i > \epsilon \; \text{or}\; \frac{1}{n} \sum_{i=1}^n x_i < -\epsilon}
     \end{align}
     We observe that $x$ is a standard Gaussian random variable and so is $-x$. Moreover, using Lemma~\ref{lem:union bound} and Theorem~\ref{thm: one sided gaussian bound}, we have:
     \begin{align}
-        \prob{ \frac{1}{n} \sum_{i=1}^n x_i < \epsilon \; \text{or}\; \frac{1}{n} \sum_{i=1}^n x_i > -\epsilon} &\leq \prob{ \frac{1}{n} \sum_{i=1}^n x_i \leq \epsilon \; \text{or}\; \frac{1}{n} \sum_{i=1}^n x_i \geq -\epsilon} \\
-        &\leq \prob{ \frac{1}{n} \sum_{i=1}^n x_i \leq \epsilon}  + \prob{\frac{1}{n} \sum_{i=1}^n x_i \geq -\epsilon} \\
-        &= \prob{ \frac{1}{n} \sum_{i=1}^n x_i \leq \epsilon}  + \prob{\frac{1}{n} \sum_{i=1}^n - x_i \leq \epsilon} \\
+        \prob{ \frac{1}{n} \sum_{i=1}^n x_i > \epsilon \; \text{or}\; \frac{1}{n} \sum_{i=1}^n x_i < -\epsilon} &\leq \prob{ \frac{1}{n} \sum_{i=1}^n x_i \geq \epsilon \; \text{or}\; \frac{1}{n} \sum_{i=1}^n x_i \leq -\epsilon} \\
+        &\leq \prob{ \frac{1}{n} \sum_{i=1}^n x_i \geq \epsilon}  + \prob{\frac{1}{n} \sum_{i=1}^n x_i \leq -\epsilon} \\
+        &= \prob{ \frac{1}{n} \sum_{i=1}^n x_i \geq \epsilon}  + \prob{\frac{1}{n} \sum_{i=1}^n - x_i \geq \epsilon} \\
         &\leq 2 \exp\left(\frac{-n\epsilon^2}{2}\right)~.
     \end{align}
     We finish the proof by picking $\delta \geq 2 \exp\left(\frac{-n\epsilon^2}{2}\right)$.
