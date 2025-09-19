@@ -23,6 +23,107 @@
             black : #333333
 
         -->
+<style>
+    .beautiful-box {
+      max-width: 100%;
+      margin: 20px auto;
+      background: #f9fafc;
+      border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(60,62,126,0.2);
+      padding: 5px;
+      text-align: center;
+      /* font-family: 'Segoe UI', Arial, sans-serif;*/
+      color: #404080;
+      transition: box-shadow 0.3s;
+    }
+    .beautiful-box:hover {
+      box-shadow: 0 8px 30px rgba(60,62,126,0.3);
+    }
+    .beautiful-box h2 {
+      margin-top: 0;
+      font-size: 120%;
+    }
+    .beautiful-box p {
+      margin-bottom: 0;
+      font-size: 100%;
+    }
+    .headertext {
+	color: #333333;
+	font-family: 'Poppins', Arial, Helvetica, sans-serif;
+	font-weight: bold;
+	/* text-align: center; */
+	font-size: 200%;
+	     }
+    .subheadertext {
+	color: #333333;
+	font-family: 'Poppins', Arial, Helvetica, sans-serif;
+	font-weight: normal;
+	font-size: 150%;
+	     }
+    .normaltext {
+	color: #333333;
+	font-family: Arial, Helvetica, sans-serif;
+	font-weight: normal;
+	font-size: 100%;
+	     }
+    .alerttext {
+	color: #da4d45;
+	font-family: Arial, Helvetica, sans-serif;
+	font-weight: normal;
+	font-size: 100%;
+	     }
+  </style>
+
+  <style>
+    .beautiful-box-news {
+      max-width: 100%;
+      margin: 20px auto;
+      background: #f9fafc;
+      /* background: radial-gradient(circle, #e0f7fa 60%, #e8f5e9 100%);*/
+      border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(60,62,126,0.15);
+      padding: 5px;
+      text-align: center;
+      /* font-family: 'Segoe UI', Arial, sans-serif;*/
+      color: #366c84;
+      transition: box-shadow 0.3s;
+    }
+    .beautiful-box-news h2 {
+      margin-top: 0;
+      font-size: 120%;
+    }
+    .item-list {
+      list-style: none;
+      padding: 0;
+      margin: 10px 0 5px 0;
+      text-align: left;
+    }
+    .item-list li {
+      background: rgba(180, 220, 220, 0.22);
+      margin: 5px 0;
+      padding: 2px;
+      border-radius: 10px;
+      font-size: 100%;
+      transition: background 0.2s;
+    }
+    .see-more-btn {
+      cursor: pointer;
+      background: #b3e5fc;
+      border: none;
+      color: #366c84;
+      padding: 2px 4px;
+      border-radius: 4px;
+      margin-top: 2px;
+      font-size: 100%;
+      transition: background 0.2s;
+    }
+    .see-more-btn:hover {
+      background: #81d4fa;
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
 
         <style>
             <!-- @font-face { -->
@@ -163,11 +264,23 @@
                     </p>
               </header>
               <section>
+		<div class="beautiful-box">
+		    <h2>Announcement</h2>
+		    <p>
+		    I am actively seeking motivated PhD and master's students interested in working in the fields of optimization (both online and offline) and statistical learning theory. If you wish to apply, please send me an email with your CV. </p>
+
+		    <p>
+Undergraduate students from IIT Delhi are also welcome to apply for long-term projects. However, I am currently not offering short-term projects or internships.
+
+Due to the high volume of emails and limited availability, I may not be able to respond to every inquiry.
+		</p>
+		</div>
 					<h2 id="about" class="subheadertext">About Me</h2>
 
                     <p class="normaltext">I am an Assistant Professor in the <a href="https://homecse.iitd.ac.in/">Department of Computer Science and Engineering</a> at <a href="https://home.iitd.ac.in/">Indian Institute of Technology Delhi (IIT Delhi)</a>. Prior to joining IIT Delhi, I was a Research Fellow in the <a href="https://ids.nus.edu.sg/">Institute of Data Science</a> at the <a href="https://www.nus.edu.sg/">National University of Singapore (NUS)</a>, where I was hosted by <a href="https://vyftan.github.io/index.html">Prof. Vincent Y. F. Tan</a>. I obtained my Ph.D. from  <a href="https://www.cs.purdue.edu/">Department of Computer Science</a> at <a href="http://www.purdue.edu/">Purdue University</a> with <a href="https://www.cs.purdue.edu/homes/jhonorio/index.html">Prof. Jean Honorio</a> as my advisor and completed my B.Tech and M.Tech (Dual Degree) from <a href="https://www.iitm.ac.in/">Indian Institute of Technology, Madras</a>.</p>
                     <!-- <p class="alerttext"> I am looking for a post doc position starting from Summer 2023. You can find my <a href="adarsh-resume.pdf"> CV here. </a> </p> -->
 <!-- in 2013, with a major in <a href="http://www.ae.iitm.ac.in/index.htm">Aerospace Engineering</a> and a minor in <a href="http://www.doms.iitm.ac.in/">Operations Research</a>. My Dual Degree thesis advisor was <a href="http://www.ae.iitm.ac.in/~krishna/ramakrishnam.html">Prof. M. Ramakrishna</a> .</p> -->
+
 
 
 
@@ -181,6 +294,26 @@
                 <!-- In past, I have worked on providing theoretical guarantees for combinatorial problems using continuous relaxation.
 For example, I have worked on <a href="https://arxiv.org/abs/1905.12552">learning Bayesian networks with low rank conditional probability tables</a>.  My research expands beyond the confines of convex problems. As an example of that, I have worked on developing provable theoretical bounds for <a href="https://arxiv.org/abs/2102.09704">fair sparse regression problem using invex relaxation</a>. -->
 				<!-- </p> -->
+
+	<div class="beautiful-box-news">
+	    <h2>News</h2>
+	    <ul class="item-list">
+		    <li><b>2025:</b> Paper "<a href="papers/sea_parafree.pdf">Parameter-free Algorithms for the Stochastically Extended Adversarial Model</a>" accepted to NeurIPS 2025. Joint work with <a href="https://scholar.google.com/citations?user=1qUSRCcAAAAJ&hl=en">Shuche Wang</a>, <a href="https://www.lamda.nju.edu.cn/zhaop/">Peng Zhao</a> and <a href="https://vyftan.github.io/">Vincent Y.F. Tan</a>.</li>
+		    <li><b>2025:</b> Paper "<a href="https://arxiv.org/abs/2409.04733">A Sample Efficient Alternating Minimization-based Algorithm For Robust Phase Retrieval</a>" accepted to the IEEE Transactions on Information Theory. Joint work with <a href="https://anandkrishna.me/">Anand Krishna</a> and <a href="https://vyftan.github.io/">Vincent Y.F. Tan</a>.</li>
+		    <li><b>2025:</b> I have joined <a href="https://homecse.iitd.ac.in/">Department of Computer Science and Engineering</a> at <a href="https://home.iitd.ac.in/">IIT Delhi</a> as an Assistant Professor. Excited about working with amazing faculty and talented students here.</li>
+		    <li class="hidden"><b>2025:</b> Paper "<a href="https://arxiv.org/abs/2208.09449">On Exact Solutions of the Inner Optimization Problem of Adversarial Robustness</a>" accepted to the IEEE ICASSP. Joint work with <a href="https://d-maurya.github.io/">Deepak Maurya</a> and <a href="https://www.cs.purdue.edu/homes/jhonorio/index.html">Jean Honorio</a>.</li>
+		    <li class="hidden"><b>2025:</b> Paper "<a href="https://arxiv.org/abs/2412.10751">p-Mean Regret for Stochastic Bandits</a>" accepted to the AAAI. Joint work with <a href="https://anandkrishna.me/">Anand Krishna</a>, Philips George John, and <a href=""https://vyftan.github.io/"">Vincent Y.F. Tan</a>.</li>
+	    </ul>
+	    <button class="see-more-btn" onclick="showMore()">See more</button>
+	  </div>
+	  <script>
+	    function showMore() {
+	      const hiddenItems = document.querySelectorAll('.item-list .hidden');
+	      hiddenItems.forEach(li => li.classList.remove('hidden'));
+	      document.querySelector('.see-more-btn').style.display = 'none';
+	    }
+	  </script>
+
 
 				<h2 id="publications" class="subheadertext">Publications</h2>
 				<p class="normaltext">
@@ -201,6 +334,22 @@ For example, I have worked on <a href="https://arxiv.org/abs/1905.12552">learnin
 						<br>
 						Adarsh Barik, Anand Krishna, Vincent Y. F. Tan<br>
 						Preprint
+					</li>
+
+					<li>
+<details>
+<summary>
+						<a href="papers/sea_parafree.pdf"> Parameter-free Algorithms for the Stochastically Extended Adversarial Model </a>
+</summary>
+<p>
+<em>
+	We develop the first parameter-free algorithms for the Stochastically Extended Adversarial (SEA) model, a framework that bridges adversarial and stochastic online convex optimization. Existing approaches for the SEA model require prior knowledge of problem-specific parameters, such as the diameter of the domain $D$ and the Lipschitz constant of the loss functions $G$, which limits their practical applicability. Addressing this, we develop parameter-free methods by leveraging the Optimistic Online Newton Step (OONS) algorithm to eliminate the need for these parameters. We first establish a comparator-adaptive algorithm for the scenario with unknown domain diameter but known Lipschitz constant, achieving an expected regret bound of $\tilde{O}\big(\|u\|_2^2 + \|u\|_2(\sqrt{\sigma^2_{1:T}} + \sqrt{\Sigma^2_{1:T}})\big)$, where $u$ is the comparator vector and $\sigma^2_{1:T}$ and $\Sigma^2_{1:T}$ represent the cumulative stochastic variance and cumulative adversarial variation, respectively. We then extend this to the more general setting where both $D$ and $G$ are unknown, attaining the comparator- and Lipschitz-adaptive algorithm. Notably, the regret bound exhibits the same dependence on $\sigma^2_{1:T}$ and $\Sigma^2_{1:T}$, demonstrating the efficacy of our proposed methods even when both parameters are unknown in the SEA model.
+</em>
+</p>
+</details>
+						<br>
+						Shuche Wang, Adarsh Barik, Peng Zhao, Vincent Y. F. Tan<br>
+						Accepted, NeurIPS 2025
 					</li>
 
 					<li>
