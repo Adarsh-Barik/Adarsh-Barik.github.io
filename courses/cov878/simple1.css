@@ -200,7 +200,7 @@ h3 {
 /* Format links & buttons */
 a,
 a:visited {
-  color: var(--link-blue);
+  color: var(--link-pink);
   transition: color 0.2s;
 }
 a.pink {
