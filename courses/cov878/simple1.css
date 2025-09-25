@@ -24,7 +24,7 @@
   /* Link colors for light theme */
   --link-blue: #3492eb;
   --link-pink: #e556b2;
-  --link-orange: #ff8c42;
+  --link-orange: #e556b2; /* same as pink for light theme */
 }
 
 /* Dark theme */
