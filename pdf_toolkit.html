@@ -1,0 +1,1526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PDF &amp; Image Toolkit — Local</title>
+<style>
+:root {
+  --bg:#f1f5f9; --card:#fff; --hover:#f8fafc; --border:#e2e8f0;
+  --text:#0f172a; --muted:#64748b; --accent:#2563eb; --accent-h:#1d4ed8;
+  --accent-bg:#dbeafe; --success:#10b981; --error:#ef4444; --warn:#f59e0b;
+  --shadow:0 1px 2px rgba(0,0,0,.04),0 4px 12px rgba(0,0,0,.04);
+}
+* { box-sizing:border-box; }
+html,body { margin:0; height:100%; }
+body {
+  font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,
+       "Helvetica Neue",Arial,sans-serif;
+  background:var(--bg); color:var(--text);
+  display:flex; flex-direction:column;
+}
+header {
+  background:var(--card); border-bottom:1px solid var(--border);
+  padding:14px 24px; display:flex; align-items:center; gap:24px;
+  box-shadow:var(--shadow); flex-shrink:0;
+}
+header h1 { margin:0; font-size:20px; font-weight:700; letter-spacing:-.02em; }
+header .subtitle { color:var(--muted); font-size:13px; }
+header .tools { margin-left:auto; display:flex; gap:16px; font-size:12px; color:var(--muted); }
+header .tools .tool::before { content:"● "; color:var(--success); }
+header .tools .tool.off::before { color:var(--error); }
+
+nav.tabs {
+  display:flex; gap:4px; padding:0 24px; background:var(--card);
+  border-bottom:1px solid var(--border); flex-shrink:0;
+}
+.tab {
+  padding:12px 20px; cursor:pointer; color:var(--muted);
+  font-weight:600; font-size:13px; border-bottom:2px solid transparent;
+  transition:color .15s,border-color .15s;
+  user-select:none;
+}
+.tab:hover { color:var(--accent); }
+.tab.active { color:var(--accent); border-bottom-color:var(--accent); }
+
+main { flex:1; overflow:hidden; padding:16px; display:flex; }
+.pane { display:none; flex:1; flex-direction:column; min-height:0; }
+.pane.active { display:flex; }
+
+.card {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:10px; box-shadow:var(--shadow);
+  display:flex; flex-direction:column; overflow:hidden;
+  flex:1; min-height:0;
+}
+.card-header { padding:18px 22px 8px; flex-shrink:0; }
+.card-header h2 { margin:0; font-size:16px; font-weight:700; }
+.card-header .subtitle { color:var(--muted); font-size:12px; margin-top:2px; }
+
+.workspace {
+  flex:1; display:grid; grid-template-columns:minmax(360px,1fr) minmax(360px,1.2fr);
+  gap:1px; background:var(--border); overflow:hidden; min-height:0;
+}
+.panel { background:var(--card); display:flex; flex-direction:column; min-height:0; overflow:hidden; }
+.left-panel { padding:0; }
+.right-panel { padding:0; }
+
+.list-header {
+  display:flex; padding:8px 12px 6px; font-size:11px; color:var(--muted);
+  font-weight:600; border-bottom:1px solid var(--border); flex-shrink:0;
+  text-transform:uppercase; letter-spacing:.05em;
+}
+.list-header span { padding-right:8px; }
+.list-header .col-num { width:28px; }
+.list-header .col-name { flex:1; }
+.list-header .col-pages { width:64px; text-align:right; }
+.list-header .col-range { width:130px; }
+.list-header .col-actions { width:78px; }
+
+.list-body { flex:1; overflow:auto; min-height:0; }
+.list-row {
+  display:flex; align-items:center; padding:6px 12px;
+  border-bottom:1px solid var(--border); cursor:pointer;
+  transition:background .1s; gap:8px;
+}
+.list-row:hover { background:var(--hover); }
+.list-row.active { background:var(--accent-bg); }
+.list-row .col-num { width:28px; color:var(--muted); font-family:ui-monospace,monospace; font-size:12px; }
+.list-row .col-name { flex:1; font-size:13px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.list-row .col-pages { width:64px; color:var(--muted); font-size:12px; text-align:right; }
+.list-row .col-range {
+  width:130px; padding:4px 8px; font-size:12px; font-family:ui-monospace,monospace;
+  border:1px solid var(--border); border-radius:4px; background:var(--card); color:var(--text);
+}
+.list-row .col-range:focus { outline:none; border-color:var(--accent); }
+.list-row .col-actions { display:flex; gap:2px; width:78px; justify-content:flex-end; }
+.list-row .btn-mini {
+  background:none; border:none; cursor:pointer; padding:2px 6px;
+  color:var(--muted); font-size:14px; border-radius:3px;
+}
+.list-row .btn-mini:hover { background:var(--border); color:var(--accent); }
+.list-row .btn-mini.danger:hover { color:var(--error); }
+
+.list-footer { padding:8px 12px; border-top:1px solid var(--border); flex-shrink:0; }
+.empty-state { padding:60px 20px; text-align:center; color:var(--muted); font-size:13px; }
+
+.output-row {
+  padding:12px 20px 16px; border-top:1px solid var(--border);
+  display:flex; align-items:center; gap:12px; flex-shrink:0;
+}
+.output-row label { font-weight:600; font-size:12px; color:var(--muted); }
+.output-row input[type=text] {
+  flex:1; padding:8px 12px; border:1px solid var(--border); border-radius:6px;
+  font-size:13px; background:var(--card); color:var(--text);
+}
+.output-row input[type=text]:focus { outline:none; border-color:var(--accent); }
+
+button, .btn {
+  padding:8px 16px; border-radius:6px; cursor:pointer; font-size:13px;
+  font-weight:500; border:1px solid var(--border); background:var(--card);
+  color:var(--text); transition:all .15s;
+}
+button:hover { background:var(--hover); border-color:var(--muted); }
+button.primary { background:var(--accent); color:#fff; border-color:var(--accent); font-weight:600; }
+button.primary:hover { background:var(--accent-h); border-color:var(--accent-h); }
+button:disabled { opacity:.5; cursor:not-allowed; }
+
+.form-body { padding:20px; overflow:auto; flex:1; }
+.form-group { margin-bottom:16px; }
+.form-group label { display:block; font-weight:600; font-size:12px;
+                    color:var(--text); margin-bottom:6px; }
+.form-group .hint { font-size:11px; color:var(--muted); margin-top:4px; }
+.form-group input[type=text], .form-group input[type=number],
+.form-group select {
+  width:100%; padding:8px 12px; border:1px solid var(--border);
+  border-radius:6px; font-size:13px; background:var(--card); color:var(--text);
+  font-family:inherit;
+}
+.form-group input:focus, .form-group select:focus { outline:none; border-color:var(--accent); }
+.form-group .input-row { display:flex; gap:8px; }
+.form-group .input-row input { flex:1; }
+
+.slider-row { display:flex; align-items:center; gap:8px; }
+.slider-row input[type=range] { flex:1; accent-color:var(--accent); }
+.slider-row .slider-val { font-family:ui-monospace,monospace; font-weight:600;
+                          color:var(--accent); min-width:40px; text-align:right; font-size:13px; }
+
+/* Preview pane */
+.preview-pane { display:flex; flex-direction:column; height:100%; min-height:0; }
+.preview-header {
+  padding:8px 12px; border-bottom:1px solid var(--border);
+  display:flex; gap:12px; align-items:center; flex-shrink:0;
+}
+.preview-title { font-weight:700; font-size:13px; }
+.preview-info { color:var(--muted); font-size:12px; }
+.preview-scroll { flex:1; overflow:auto; padding:10px; min-height:0; }
+.preview-grid {
+  display:grid; grid-template-columns:repeat(auto-fill, minmax(140px, 1fr));
+  gap:10px;
+}
+.preview-empty {
+  text-align:center; padding:60px 20px; color:var(--muted); font-size:13px;
+  grid-column:1 / -1;
+}
+.thumb {
+  background:var(--card); border:2px solid var(--border); border-radius:6px;
+  cursor:pointer; overflow:hidden; transition:border-color .15s, transform .1s;
+  display:flex; flex-direction:column;
+}
+.thumb:hover { border-color:var(--muted); }
+.thumb.selected { border-color:var(--accent); background:var(--accent-bg); }
+.thumb.selected .thumb-label { color:var(--accent); font-weight:700; }
+.thumb-img {
+  aspect-ratio:3/4; background:#f8fafc; display:flex; align-items:center;
+  justify-content:center; overflow:hidden;
+}
+.thumb-img img { max-width:100%; max-height:100%; display:block; }
+.thumb-label { padding:4px 6px; font-size:11px; text-align:center;
+                color:var(--muted); overflow:hidden; text-overflow:ellipsis;
+                white-space:nowrap; }
+
+footer {
+  background:var(--card); border-top:1px solid var(--border);
+  padding:8px 20px; display:flex; align-items:center; gap:12px;
+  font-size:12px; color:var(--muted); flex-shrink:0;
+}
+footer .dot { color:var(--success); font-size:14px; }
+footer .dot.busy { color:var(--accent); }
+footer .dot.error { color:var(--error); }
+footer .dot.success { color:var(--success); }
+footer .progress { flex:0 0 200px; height:4px; background:var(--border);
+                    border-radius:2px; overflow:hidden; display:none; }
+footer .progress.show { display:block; }
+footer .progress .bar {
+  height:100%; width:30%; background:var(--accent);
+  animation:indeterminate 1.2s ease-in-out infinite;
+}
+@keyframes indeterminate {
+  0% { transform:translateX(-100%); }
+  100% { transform:translateX(430%); }
+}
+
+/* Modal */
+.modal {
+  position:fixed; inset:0; z-index:1000;
+  display:flex; align-items:center; justify-content:center;
+}
+.modal-backdrop { position:absolute; inset:0; background:rgba(0,0,0,.5); }
+.modal-content {
+  position:relative; background:var(--card); border-radius:10px;
+  padding:20px; max-width:90vw; max-height:90vh; overflow:auto;
+  box-shadow:0 20px 60px rgba(0,0,0,.3);
+}
+.modal-content img { display:block; max-width:100%; max-height:75vh; margin:8px auto; }
+.modal-title { font-weight:700; margin-bottom:8px; }
+.modal-hint { color:var(--muted); font-size:12px; text-align:center; margin-top:8px; }
+
+.radio-group { display:flex; gap:16px; padding:4px 0; }
+.radio-group label {
+  display:flex; align-items:center; gap:6px; cursor:pointer;
+  font-size:13px; font-weight:500;
+}
+.radio-group input[type=radio] { accent-color:var(--accent); }
+
+.toast {
+  position:fixed; bottom:60px; right:24px; background:var(--error); color:#fff;
+  padding:12px 20px; border-radius:8px; box-shadow:0 8px 24px rgba(0,0,0,.2);
+  font-size:13px; max-width:360px; z-index:2000;
+  animation:slideIn .2s ease-out;
+}
+@keyframes slideIn { from { transform:translateY(20px); opacity:0; }
+                     to { transform:translateY(0); opacity:1; } }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>PDF &amp; Image Toolkit</h1>
+  <span class="subtitle">runs locally in your browser — nothing is uploaded</span>
+  <div class="tools">
+    <span class="tool" id="tool-pdflib">pdf-lib</span>
+    <span class="tool" id="tool-pdfjs">pdf.js</span>
+    <span class="tool" id="tool-jszip">JSZip</span>
+  </div>
+</header>
+
+<nav class="tabs">
+  <div class="tab active" data-pane="combine">Combine</div>
+  <div class="tab" data-pane="extract">Extract</div>
+  <div class="tab" data-pane="convert">Convert</div>
+</nav>
+
+<main>
+  <!-- ══════════ COMBINE ══════════ -->
+  <section class="pane active" id="pane-combine">
+    <div class="card">
+      <div class="card-header">
+        <h2>Combine PDFs</h2>
+        <div class="subtitle">Merge multiple PDFs · click a row to preview, click thumbnails to toggle pages</div>
+      </div>
+      <div class="workspace">
+        <div class="panel left-panel">
+          <div class="list-header">
+            <span class="col-num">#</span>
+            <span class="col-name">File</span>
+            <span class="col-pages">Pages</span>
+            <span class="col-range">Range</span>
+            <span class="col-actions"></span>
+          </div>
+          <div class="list-body" id="combine-list">
+            <div class="empty-state">No PDFs added yet. Click “+ Add PDFs”.</div>
+          </div>
+          <div class="list-footer">
+            <button id="combine-add">+ Add PDFs</button>
+          </div>
+        </div>
+        <div class="panel right-panel" id="combine-preview"></div>
+      </div>
+      <div class="output-row">
+        <label>Output</label>
+        <input type="text" id="combine-output" placeholder="combined.pdf">
+        <button class="primary" id="combine-run">Combine PDFs</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ EXTRACT ══════════ -->
+  <section class="pane" id="pane-extract">
+    <div class="card">
+      <div class="card-header">
+        <h2>Extract Pages</h2>
+        <div class="subtitle">Keep selected pages · click thumbnails to toggle</div>
+      </div>
+      <div class="workspace">
+        <div class="panel left-panel">
+          <div class="form-body">
+            <div class="form-group">
+              <label>Input PDF</label>
+              <div class="input-row">
+                <input type="text" id="extract-input" readonly placeholder="Choose a PDF…">
+                <button id="extract-browse">Browse…</button>
+              </div>
+              <div class="hint" id="extract-info"></div>
+            </div>
+            <div class="form-group">
+              <label>Page range</label>
+              <input type="text" id="extract-range" placeholder="all pages">
+              <div class="hint">Examples: <code>1-3, 5, 7-end</code> · leave blank for all pages</div>
+            </div>
+            <div class="form-group">
+              <label>Output filename</label>
+              <input type="text" id="extract-output" placeholder="extracted.pdf">
+            </div>
+            <button class="primary" id="extract-run" style="margin-top:8px">Extract Pages</button>
+          </div>
+        </div>
+        <div class="panel right-panel" id="extract-preview"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ CONVERT ══════════ -->
+  <section class="pane" id="pane-convert">
+    <div class="card">
+      <div class="card-header">
+        <h2>Convert</h2>
+        <div class="subtitle">Pick items in the preview to include in the output</div>
+      </div>
+      <div style="padding:0 22px 4px">
+        <div class="radio-group">
+          <label><input type="radio" name="direction" value="to_pdf" checked> Image → PDF</label>
+          <label><input type="radio" name="direction" value="to_image"> PDF → Image</label>
+        </div>
+      </div>
+      <div class="workspace">
+        <div class="panel left-panel">
+          <div class="form-body" id="convert-form"></div>
+        </div>
+        <div class="panel right-panel" id="convert-preview"></div>
+      </div>
+      <div class="output-row">
+        <label>Est. size</label>
+        <span id="convert-est" style="font-weight:600;min-width:80px;color:var(--muted)">—</span>
+        <div style="flex:1"></div>
+        <button class="primary" id="convert-run">Convert</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <span class="dot" id="status-dot">●</span>
+  <span id="status-text">Ready</span>
+  <div class="progress" id="progress"><div class="bar"></div></div>
+</footer>
+
+<!-- ─────────────── Libraries (CDN) ─────────────── -->
+<script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+
+<script>
+"use strict";
+
+// ════════════════════════════════════════════════════════════════
+//  Setup & lib check
+// ════════════════════════════════════════════════════════════════
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+
+const libStatus = {
+  pdflib: typeof PDFLib !== 'undefined',
+  pdfjs:  typeof pdfjsLib !== 'undefined',
+  jszip:  typeof JSZip !== 'undefined',
+};
+Object.entries(libStatus).forEach(([k, ok]) => {
+  const el = document.getElementById(`tool-${k}`);
+  if (el) el.classList.toggle('off', !ok);
+});
+if (libStatus.pdfjs) {
+  pdfjsLib.GlobalWorkerOptions.workerSrc =
+    'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
+}
+if (!libStatus.pdflib || !libStatus.pdfjs) {
+  showStatus('Could not load libraries — check your internet connection', 'error');
+  alert('This app needs pdf-lib and pdf.js. If you are offline, download the libraries and reference them locally.');
+}
+
+// ════════════════════════════════════════════════════════════════
+//  Utilities
+// ════════════════════════════════════════════════════════════════
+function debounce(fn, ms) {
+  let t;
+  return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); };
+}
+
+function humanSize(n) {
+  if (n == null) return '—';
+  const units = ['B', 'KB', 'MB', 'GB'];
+  let i = 0;
+  while (n >= 1024 && i < units.length - 1) { n /= 1024; i++; }
+  return i === 0 ? `${n} ${units[i]}` : `${n.toFixed(2)} ${units[i]}`;
+}
+
+function truncate(s, n) { return s.length > n ? s.slice(0, n - 1) + '…' : s; }
+
+function parseRange(text, total) {
+  if (!text.trim()) return Array.from({ length: total }, (_, i) => i + 1);
+  const result = new Set();
+  for (const raw of text.split(',')) {
+    const p = raw.trim();
+    if (!p) continue;
+    if (p.includes('-')) {
+      let [a, b] = p.split('-', 2).map(s => s.trim());
+      a = a === '' || a === 'start' ? 1 : parseInt(a, 10);
+      b = b === '' || b === 'end' ? total : parseInt(b, 10);
+      if (isNaN(a) || isNaN(b)) continue;
+      if (a > b) [a, b] = [b, a];
+      for (let i = a; i <= b; i++) if (i >= 1 && i <= total) result.add(i);
+    } else {
+      const n = parseInt(p, 10);
+      if (!isNaN(n) && n >= 1 && n <= total) result.add(n);
+    }
+  }
+  return [...result].sort((a, b) => a - b);
+}
+
+function compressRanges(pages) {
+  if (!pages.length) return '';
+  pages = [...pages].sort((a, b) => a - b);
+  const parts = [];
+  let start = pages[0], prev = pages[0];
+  for (const p of pages.slice(1)) {
+    if (p === prev + 1) prev = p;
+    else {
+      parts.push(start === prev ? `${start}` : `${start}-${prev}`);
+      start = prev = p;
+    }
+  }
+  parts.push(start === prev ? `${start}` : `${start}-${prev}`);
+  return parts.join(', ');
+}
+
+function downloadBlob(blob, filename) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 2000);
+}
+
+function showStatus(msg, kind = 'info') {
+  const dot = document.getElementById('status-dot');
+  const txt = document.getElementById('status-text');
+  txt.textContent = msg;
+  dot.className = 'dot';
+  if (kind === 'busy') dot.classList.add('busy');
+  else if (kind === 'error') dot.classList.add('error');
+  else if (kind === 'success') dot.classList.add('success');
+}
+
+function showProgress(on) {
+  document.getElementById('progress').classList.toggle('show', on);
+}
+
+function toast(msg) {
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 4000);
+}
+
+function pickFiles({ accept, multiple }) {
+  return new Promise(resolve => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = accept;
+    input.multiple = !!multiple;
+    input.onchange = () => resolve([...input.files]);
+    input.click();
+  });
+}
+
+// ════════════════════════════════════════════════════════════════
+//  PDF helpers
+// ════════════════════════════════════════════════════════════════
+async function loadPdfJs(buffer) {
+  // Pass a copy: pdf.js transfers the buffer to its worker, which detaches it
+  return pdfjsLib.getDocument({ data: new Uint8Array(buffer.slice(0)) }).promise;
+}
+
+async function pdfPageCountFromBuffer(buffer) {
+  try {
+    const doc = await PDFLib.PDFDocument.load(buffer);
+    return doc.getPageCount();
+  } catch (e) {
+    return null;
+  }
+}
+
+async function renderPdfThumb(pdfDoc, pageNum, width = 140) {
+  const page = await pdfDoc.getPage(pageNum);
+  const baseViewport = page.getViewport({ scale: 1 });
+  const scale = width / baseViewport.width;
+  const viewport = page.getViewport({ scale });
+  const canvas = document.createElement('canvas');
+  canvas.width = Math.floor(viewport.width);
+  canvas.height = Math.floor(viewport.height);
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = 'white';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  await page.render({ canvasContext: ctx, viewport }).promise;
+  return canvas.toDataURL('image/jpeg', 0.75);
+}
+
+async function renderPdfLarge(pdfDoc, pageNum, width = 900) {
+  const page = await pdfDoc.getPage(pageNum);
+  const baseViewport = page.getViewport({ scale: 1 });
+  const scale = width / baseViewport.width;
+  const viewport = page.getViewport({ scale });
+  const canvas = document.createElement('canvas');
+  canvas.width = Math.floor(viewport.width);
+  canvas.height = Math.floor(viewport.height);
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = 'white';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  await page.render({ canvasContext: ctx, viewport }).promise;
+  return canvas.toDataURL('image/jpeg', 0.9);
+}
+
+async function renderImageThumb(file, maxW = 140) {
+  const url = URL.createObjectURL(file);
+  try {
+    const img = await new Promise((res, rej) => {
+      const im = new Image();
+      im.onload = () => res(im);
+      im.onerror = rej;
+      im.src = url;
+    });
+    const scale = Math.min(maxW / img.width, 1);
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.max(1, Math.floor(img.width * scale));
+    canvas.height = Math.max(1, Math.floor(img.height * scale));
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = 'white';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    return canvas.toDataURL('image/jpeg', 0.7);
+  } finally {
+    URL.revokeObjectURL(url);
+  }
+}
+
+// ════════════════════════════════════════════════════════════════
+//  Preview pane
+// ════════════════════════════════════════════════════════════════
+class PreviewPane {
+  constructor(container, { interactive = true, onToggle = null } = {}) {
+    this.container = container;
+    this.interactive = interactive;
+    this.onToggle = onToggle;
+    this.selection = new Set();
+    this.thumbs = new Map();
+    this.token = 0;
+    this._pdfDoc = null;
+    this._setup();
+  }
+
+  _setup() {
+    this.container.classList.add('preview-pane');
+    this.container.innerHTML = `
+      <div class="preview-header">
+        <span class="preview-title">Preview</span>
+        <span class="preview-info"></span>
+      </div>
+      <div class="preview-scroll">
+        <div class="preview-grid"></div>
+      </div>
+    `;
+    this.infoEl = $('.preview-info', this.container);
+    this.gridEl = $('.preview-grid', this.container);
+  }
+
+  showMessage(msg) {
+    this.token++;
+    this._pdfDoc = null;
+    this.thumbs.clear();
+    this.selection.clear();
+    this.gridEl.innerHTML = `<div class="preview-empty">${msg}</div>`;
+    this.infoEl.textContent = '';
+  }
+
+  async showPdf(pdfDoc, selectedPages, hint = 'Click a page to toggle') {
+    this.token++;
+    const token = this.token;
+    this._pdfDoc = pdfDoc;
+    this.thumbs.clear();
+    this.selection = new Set(selectedPages);
+    this.gridEl.innerHTML = '';
+    let info = `${pdfDoc.numPages} pages`;
+    if (pdfDoc.numPages > 150) info += ' · showing first 150';
+    if (this.interactive) info += ` · ${hint}`;
+    this.infoEl.textContent = info;
+
+    const max = Math.min(pdfDoc.numPages, 150);
+    for (let i = 1; i <= max; i++) {
+      if (token !== this.token) return;
+      try {
+        const url = await renderPdfThumb(pdfDoc, i);
+        if (token !== this.token) return;
+        this._addThumb(i, url, `Page ${i}`);
+      } catch (e) {
+        if (token !== this.token) return;
+        this._addThumb(i, null, `Page ${i}`);
+      }
+      await new Promise(r => setTimeout(r, 0));
+    }
+  }
+
+  async showImages(files, selectedIndices, hint = 'Click an image to toggle') {
+    this.token++;
+    const token = this.token;
+    this._pdfDoc = null;
+    this.thumbs.clear();
+    this.selection = new Set(selectedIndices);
+    this.gridEl.innerHTML = '';
+    let info = `${files.length} image(s)`;
+    if (this.interactive) info += ` · ${hint}`;
+    this.infoEl.textContent = info;
+
+    for (let i = 0; i < files.length; i++) {
+      if (token !== this.token) return;
+      let url = null;
+      try { url = await renderImageThumb(files[i]); } catch (e) { /* ignore */ }
+      if (token !== this.token) return;
+      this._addThumb(i, url, truncate(files[i].name, 16));
+      await new Promise(r => setTimeout(r, 0));
+    }
+  }
+
+  _addThumb(key, dataUrl, label) {
+    const div = document.createElement('div');
+    div.className = 'thumb';
+    div.dataset.key = key;
+    if (this.selection.has(key)) div.classList.add('selected');
+    div.innerHTML = `
+      <div class="thumb-img">${dataUrl ? `<img src="${dataUrl}" alt="">` : '…'}</div>
+      <div class="thumb-label">${label}</div>
+    `;
+    div.addEventListener('click', e => {
+      e.stopPropagation();
+      if (!this.interactive) return;
+      this._toggle(key);
+    });
+    div.addEventListener('dblclick', e => {
+      e.stopPropagation();
+      if (!dataUrl) return;
+      this._zoom(dataUrl, label);
+    });
+    this.gridEl.appendChild(div);
+    this.thumbs.set(key, div);
+  }
+
+  _toggle(key) {
+    const wasSelected = this.selection.has(key);
+    if (wasSelected) this.selection.delete(key);
+    else this.selection.add(key);
+    const div = this.thumbs.get(key);
+    if (div) div.classList.toggle('selected', !wasSelected);
+    if (this.onToggle) this.onToggle(key, !wasSelected);
+  }
+
+  _zoom(dataUrl, label) {
+    const modal = document.createElement('div');
+    modal.className = 'modal';
+    modal.innerHTML = `
+      <div class="modal-backdrop"></div>
+      <div class="modal-content">
+        <div class="modal-title">${label}</div>
+        <img src="${dataUrl}" alt="">
+        <div class="modal-hint">Click outside or press Esc to close</div>
+      </div>
+    `;
+    modal.addEventListener('click', () => modal.remove());
+    const onKey = e => {
+      if (e.key === 'Escape') { modal.remove(); document.removeEventListener('keydown', onKey); }
+    };
+    document.addEventListener('keydown', onKey);
+    document.body.appendChild(modal);
+  }
+
+  setSelection(keys) {
+    this.selection = new Set(keys);
+    for (const [key, div] of this.thumbs) {
+      div.classList.toggle('selected', this.selection.has(key));
+    }
+  }
+}
+
+// ════════════════════════════════════════════════════════════════
+//  Combine tab
+// ════════════════════════════════════════════════════════════════
+class CombineTab {
+  constructor() {
+    this.rows = [];
+    this.currentId = null;
+    this.nextId = 1;
+    this.preview = new PreviewPane($('#combine-preview'), {
+      interactive: true,
+      onToggle: (k, s) => this._onPreviewToggle(k, s),
+    });
+    this.preview.showMessage('Add a PDF and click its row to preview pages');
+
+    $('#combine-add').addEventListener('click', () => this._addFiles());
+    $('#combine-run').addEventListener('click', () => this._combine());
+  }
+
+  async _addFiles() {
+    const files = await pickFiles({ accept: 'application/pdf,.pdf', multiple: true });
+    for (const file of files) {
+      if (!file.name.toLowerCase().endsWith('.pdf')) continue;
+      if (this.rows.some(r => r.file.name === file.name && r.file.size === file.size)) continue;
+      const buffer = await file.arrayBuffer();
+      const row = {
+        id: this.nextId++, file, buffer,
+        pdfDoc: null, pageCount: null, range: '',
+        element: null,
+      };
+      this.rows.push(row);
+      this._renderRow(row);
+      this._loadMeta(row);
+    }
+    if (this.rows.length && this.currentId === null) this._select(this.rows[0].id);
+    this._updateEmptyState();
+  }
+
+  async _loadMeta(row) {
+    row.pageCount = await pdfPageCountFromBuffer(row.buffer);
+    const pagesEl = row.element.querySelector('.col-pages');
+    pagesEl.textContent = row.pageCount != null ? `${row.pageCount} p` : '?';
+    if (row.pageCount == null) return;
+    try {
+      row.pdfDoc = await loadPdfJs(row.buffer);
+    } catch (e) {
+      pagesEl.textContent = 'error';
+      return;
+    }
+    if (row.id === this.currentId) this._previewRow(row);
+  }
+
+  _renderRow(row) {
+    const div = document.createElement('div');
+    div.className = 'list-row';
+    div.innerHTML = `
+      <span class="col-num"></span>
+      <span class="col-name" title="${row.file.name}">${truncate(row.file.name, 36)}</span>
+      <span class="col-pages">…</span>
+      <input class="col-range" type="text" placeholder="all" value="">
+      <span class="col-actions">
+        <button class="btn-mini" data-act="up" title="Up">↑</button>
+        <button class="btn-mini" data-act="down" title="Down">↓</button>
+        <button class="btn-mini danger" data-act="rm" title="Remove">✕</button>
+      </span>
+    `;
+    div.addEventListener('click', e => {
+      if (e.target.closest('input, button')) return;
+      this._select(row.id);
+    });
+    const rangeInput = div.querySelector('.col-range');
+    rangeInput.addEventListener('input', () => {
+      row.range = rangeInput.value;
+      if (row.id === this.currentId) this._syncPreviewToRange(row);
+    });
+    div.querySelectorAll('button').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.stopPropagation();
+        const act = btn.dataset.act;
+        if (act === 'rm') this._remove(row.id);
+        else if (act === 'up') this._move(row.id, -1);
+        else if (act === 'down') this._move(row.id, 1);
+      });
+    });
+    row.element = div;
+    // Insert before any empty-state placeholder
+    const list = $('#combine-list');
+    const placeholder = list.querySelector('.empty-state');
+    if (placeholder) list.insertBefore(div, placeholder);
+    else list.appendChild(div);
+    this._reindex();
+  }
+
+  _reindex() {
+    this.rows.forEach((r, i) => {
+      r.element.querySelector('.col-num').textContent = i + 1;
+    });
+  }
+
+  _updateEmptyState() {
+    const list = $('#combine-list');
+    const placeholder = list.querySelector('.empty-state');
+    if (this.rows.length === 0) {
+      if (!placeholder) {
+        const div = document.createElement('div');
+        div.className = 'empty-state';
+        div.textContent = 'No PDFs added yet. Click “+ Add PDFs”.';
+        list.appendChild(div);
+      }
+    } else if (placeholder) {
+      placeholder.remove();
+    }
+  }
+
+  _select(id) {
+    if (this.currentId === id) return;
+    this.currentId = id;
+    this.rows.forEach(r => r.element.classList.toggle('active', r.id === id));
+    const row = this.rows.find(r => r.id === id);
+    if (row) this._previewRow(row);
+  }
+
+  async _previewRow(row) {
+    if (!row.pdfDoc) {
+      // Wait until pdf.js has been loaded
+      for (let i = 0; i < 50 && !row.pdfDoc && row.pageCount === null; i++)
+        await new Promise(r => setTimeout(r, 100));
+      for (let i = 0; i < 50 && !row.pdfDoc; i++)
+        await new Promise(r => setTimeout(r, 100));
+    }
+    if (!row.pdfDoc) { this.preview.showMessage('Could not read this PDF'); return; }
+    if (row.id !== this.currentId) return;
+    const pages = this._rowPages(row);
+    await this.preview.showPdf(row.pdfDoc, pages);
+  }
+
+  _rowPages(row) {
+    if (row.pageCount == null) return new Set();
+    if (!row.range.trim())
+      return new Set(Array.from({ length: row.pageCount }, (_, i) => i + 1));
+    return new Set(parseRange(row.range, row.pageCount));
+  }
+
+  _onPreviewToggle(key, selected) {
+    const row = this.rows.find(r => r.id === this.currentId);
+    if (!row || row.pageCount == null) return;
+    const pages = this._rowPages(row);
+    if (selected) pages.add(key); else pages.delete(key);
+    if (pages.size === 0) {
+      pages.add(key);
+      this.preview.setSelection(pages);
+      return;
+    }
+    row.range = pages.size === row.pageCount ? '' : compressRanges([...pages]);
+    row.element.querySelector('.col-range').value = row.range;
+  }
+
+  _syncPreviewToRange(row) {
+    if (row.pageCount == null) return;
+    this.preview.setSelection(this._rowPages(row));
+  }
+
+  _remove(id) {
+    const idx = this.rows.findIndex(r => r.id === id);
+    if (idx < 0) return;
+    this.rows[idx].element.remove();
+    this.rows.splice(idx, 1);
+    this._reindex();
+    this._updateEmptyState();
+    if (this.currentId === id) {
+      this.currentId = null;
+      if (this.rows.length) this._select(this.rows[0].id);
+      else this.preview.showMessage('Add a PDF and click its row to preview pages');
+    }
+  }
+
+  _move(id, delta) {
+    const idx = this.rows.findIndex(r => r.id === id);
+    const tgt = idx + delta;
+    if (idx < 0 || tgt < 0 || tgt >= this.rows.length) return;
+    [this.rows[idx], this.rows[tgt]] = [this.rows[tgt], this.rows[idx]];
+    const list = $('#combine-list');
+    this.rows.forEach(r => list.appendChild(r.element));
+    this._reindex();
+  }
+
+  async _combine() {
+    if (!this.rows.length) { toast('Add at least one PDF first.'); return; }
+    const outName = $('#combine-output').value.trim() || 'combined.pdf';
+    showStatus('Combining PDFs…', 'busy');
+    showProgress(true);
+    try {
+      const outDoc = await PDFLib.PDFDocument.create();
+      let totalAdded = 0;
+      for (const row of this.rows) {
+        if (row.pageCount == null) continue;
+        const pages = [...this._rowPages(row)];
+        if (!pages.length) continue;
+        const srcDoc = await PDFLib.PDFDocument.load(row.buffer);
+        const indices = pages.map(p => p - 1);
+        const copied = await outDoc.copyPages(srcDoc, indices);
+        for (const p of copied) outDoc.addPage(p);
+        totalAdded += pages.length;
+      }
+      if (!totalAdded) { throw new Error('No pages selected'); }
+      const bytes = await outDoc.save();
+      downloadBlob(new Blob([bytes], { type: 'application/pdf' }), outName);
+      showStatus(`Saved ${outName} (${totalAdded} pages)`, 'success');
+    } catch (e) {
+      console.error(e);
+      showStatus('Combine failed: ' + e.message, 'error');
+      toast('Combine failed: ' + e.message);
+    } finally {
+      showProgress(false);
+    }
+  }
+}
+
+// ════════════════════════════════════════════════════════════════
+//  Extract tab
+// ════════════════════════════════════════════════════════════════
+class ExtractTab {
+  constructor() {
+    this.file = null;
+    this.buffer = null;
+    this.pdfDoc = null;
+    this.total = 0;
+    this._updating = false;
+
+    this.preview = new PreviewPane($('#extract-preview'), {
+      interactive: true,
+      onToggle: (k, s) => this._onPreviewToggle(k, s),
+    });
+    this.preview.showMessage('Browse for an input PDF to preview its pages');
+
+    $('#extract-browse').addEventListener('click', () => this._browse());
+    $('#extract-range').addEventListener('input', () => this._onRangeInput());
+    $('#extract-run').addEventListener('click', () => this._run());
+  }
+
+  async _browse() {
+    const [file] = await pickFiles({ accept: 'application/pdf,.pdf', multiple: false });
+    if (!file) return;
+    this.file = file;
+    this.buffer = await file.arrayBuffer();
+    $('#extract-input').value = file.name;
+    if (!$('#extract-output').value)
+      $('#extract-output').value = file.name.replace(/\.pdf$/i, '') + '-extracted.pdf';
+    showStatus('Loading PDF…', 'busy');
+    try {
+      this.total = await pdfPageCountFromBuffer(this.buffer) || 0;
+      this.pdfDoc = await loadPdfJs(this.buffer);
+      $('#extract-info').textContent = `${this.total} pages`;
+      const pages = this._currentPages();
+      await this.preview.showPdf(this.pdfDoc, pages);
+      showStatus('Ready', 'info');
+    } catch (e) {
+      showStatus('Could not read PDF: ' + e.message, 'error');
+      this.preview.showMessage('Could not read PDF');
+    }
+  }
+
+  _currentPages() {
+    if (!this.total) return new Set();
+    const text = $('#extract-range').value.trim();
+    if (!text) return new Set(Array.from({ length: this.total }, (_, i) => i + 1));
+    return new Set(parseRange(text, this.total));
+  }
+
+  _onRangeInput() {
+    if (this._updating || !this.total) return;
+    this.preview.setSelection(this._currentPages());
+  }
+
+  _onPreviewToggle(key, selected) {
+    if (!this.total) return;
+    const pages = this._currentPages();
+    if (selected) pages.add(key); else pages.delete(key);
+    if (pages.size === 0) { pages.add(key); this.preview.setSelection(pages); return; }
+    this._updating = true;
+    $('#extract-range').value =
+      pages.size === this.total ? '' : compressRanges([...pages]);
+    this._updating = false;
+  }
+
+  async _run() {
+    if (!this.buffer) { toast('Choose an input PDF first.'); return; }
+    const pages = [...this._currentPages()];
+    if (!pages.length) { toast('No pages selected.'); return; }
+    const outName = $('#extract-output').value.trim() || 'extracted.pdf';
+    showStatus('Extracting pages…', 'busy');
+    showProgress(true);
+    try {
+      const srcDoc = await PDFLib.PDFDocument.load(this.buffer);
+      const outDoc = await PDFLib.PDFDocument.create();
+      const copied = await outDoc.copyPages(srcDoc, pages.map(p => p - 1));
+      for (const p of copied) outDoc.addPage(p);
+      const bytes = await outDoc.save();
+      downloadBlob(new Blob([bytes], { type: 'application/pdf' }), outName);
+      showStatus(`Saved ${outName} (${pages.length} pages)`, 'success');
+    } catch (e) {
+      console.error(e);
+      showStatus('Extract failed: ' + e.message, 'error');
+      toast('Extract failed: ' + e.message);
+    } finally {
+      showProgress(false);
+    }
+  }
+}
+
+// ════════════════════════════════════════════════════════════════
+//  Convert tab
+// ════════════════════════════════════════════════════════════════
+class ConvertTab {
+  constructor() {
+    this.direction = 'to_pdf';
+
+    // image → pdf state
+    this.images = [];         // File[]
+    this.selectedImages = new Set();   // indices
+
+    // pdf → image state
+    this.pdfFile = null;
+    this.pdfBuffer = null;
+    this.pdfDoc = null;
+    this.pdfTotal = 0;
+    this.selectedPages = new Set();
+    this._updatingRange = false;
+
+    // shared settings
+    this.quality = 100;
+    this.dpi = 150;
+    this.format = 'jpg';
+    this.compress = 'jpeg';
+
+    this.preview = new PreviewPane($('#convert-preview'), {
+      interactive: true,
+      onToggle: (k, s) => this._onPreviewToggle(k, s),
+    });
+    this.preview.showMessage('Select content to preview');
+
+    // Radio direction
+    $$('input[name="direction"]').forEach(r => {
+      r.addEventListener('change', () => {
+        this.direction = r.value;
+        this._reset();
+      });
+    });
+    $('#convert-run').addEventListener('click', () => this._run());
+
+    this._scheduleEstimate = debounce(() => this._estimate(), 500);
+    this._buildForm();
+  }
+
+  _reset() {
+    this.images = [];
+    this.selectedImages.clear();
+    this.pdfFile = null;
+    this.pdfBuffer = null;
+    this.pdfDoc = null;
+    this.pdfTotal = 0;
+    this.selectedPages.clear();
+    this.preview.showMessage('Select content to preview');
+    $('#convert-est').textContent = '—';
+    this._buildForm();
+  }
+
+  _buildForm() {
+    const form = $('#convert-form');
+    form.innerHTML = '';
+    if (this.direction === 'to_pdf') this._buildToPdfForm(form);
+    else this._buildToImageForm(form);
+  }
+
+  _buildToPdfForm(form) {
+    form.innerHTML = `
+      <div class="form-group">
+        <label>Images</label>
+        <div style="border:1px solid var(--border);border-radius:6px;padding:8px;
+                    max-height:140px;overflow:auto;margin-bottom:8px"
+             id="images-list"></div>
+        <div style="display:flex;gap:8px">
+          <button id="images-add">+ Add Images</button>
+          <button id="images-remove" disabled>Remove</button>
+          <button id="images-select-all" style="margin-left:auto">Select all</button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Compression</label>
+        <select id="compress">
+          <option value="jpeg">JPEG · best for photos</option>
+          <option value="zip">ZIP · lossless (diagrams, screenshots)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Quality</label>
+        <div class="slider-row">
+          <input type="range" id="quality" min="1" max="100" value="${this.quality}">
+          <span class="slider-val" id="quality-val">${this.quality}%</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Output filename</label>
+        <input type="text" id="out-name" placeholder="output.pdf">
+      </div>
+    `;
+
+    // Restore images list UI
+    this._refreshImageList();
+
+    $('#images-add').addEventListener('click', () => this._addImages());
+    $('#images-remove').addEventListener('click', () => this._removeSelectedImages());
+    $('#images-select-all').addEventListener('click', () => {
+      this.selectedImages = new Set(this.images.map((_, i) => i));
+      this._refreshImageList();
+      this.preview.setSelection(this.selectedImages);
+      this._scheduleEstimate();
+    });
+    $('#compress').addEventListener('change', e => {
+      this.compress = e.target.value;
+      this._scheduleEstimate();
+    });
+    const q = $('#quality');
+    q.addEventListener('input', () => {
+      this.quality = parseInt(q.value, 10);
+      $('#quality-val').textContent = this.quality + '%';
+      this._scheduleEstimate();
+    });
+  }
+
+  _refreshImageList() {
+    const list = $('#images-list');
+    if (!list) return;
+    if (!this.images.length) {
+      list.innerHTML = `<div style="color:var(--muted);font-size:12px;text-align:center;padding:12px">No images added</div>`;
+      return;
+    }
+    list.innerHTML = this.images.map((f, i) => `
+      <div class="img-row" data-idx="${i}"
+           style="display:flex;align-items:center;gap:8px;padding:4px 0;
+                  border-bottom:1px solid var(--border);cursor:pointer">
+        <span style="color:${this.selectedImages.has(i) ? 'var(--accent)' : 'var(--muted)'}">
+          ${this.selectedImages.has(i) ? '●' : '○'}
+        </span>
+        <span style="flex:1;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">
+          ${truncate(f.name, 40)}
+        </span>
+      </div>
+    `).join('');
+    list.querySelectorAll('.img-row').forEach(row => {
+      row.addEventListener('click', () => {
+        const i = parseInt(row.dataset.idx, 10);
+        this._toggleImage(i);
+      });
+    });
+    const removeBtn = $('#images-remove');
+    if (removeBtn) removeBtn.disabled = this.selectedImages.size === 0;
+  }
+
+  _toggleImage(i) {
+    if (this.selectedImages.has(i)) {
+      if (this.selectedImages.size <= 1) {
+        // can't deselect last one
+        this._refreshImageList();
+        return;
+      }
+      this.selectedImages.delete(i);
+    } else {
+      this.selectedImages.add(i);
+    }
+    this._refreshImageList();
+    this.preview.setSelection(this.selectedImages);
+    this._scheduleEstimate();
+  }
+
+  async _addImages() {
+    const files = await pickFiles({
+      accept: 'image/*,.jpg,.jpeg,.png,.gif,.bmp,.webp,.tif,.tiff',
+      multiple: true,
+    });
+    const startIdx = this.images.length;
+    for (const f of files) {
+      const i = this.images.length;
+      this.images.push(f);
+      this.selectedImages.add(i);
+    }
+    this._refreshImageList();
+    this.preview.showImages(this.images, this.selectedImages);
+    this._scheduleEstimate();
+  }
+
+  _removeSelectedImages() {
+    const removeSet = new Set(this.selectedImages);
+    const newImages = [];
+    const newSelected = new Set();
+    for (let i = 0; i < this.images.length; i++) {
+      if (removeSet.has(i)) continue;
+      newImages.push(this.images[i]);
+      newSelected.add(newImages.length - 1);
+    }
+    this.images = newImages;
+    this.selectedImages = newSelected;
+    this._refreshImageList();
+    if (this.images.length) this.preview.showImages(this.images, this.selectedImages);
+    else this.preview.showMessage('Add images to preview');
+    this._scheduleEstimate();
+  }
+
+  _buildToImageForm(form) {
+    form.innerHTML = `
+      <div class="form-group">
+        <label>Input PDF</label>
+        <div class="input-row">
+          <input type="text" id="pdf-input" readonly
+                 value="${this.pdfFile ? this.pdfFile.name : ''}"
+                 placeholder="Choose a PDF…">
+          <button id="pdf-browse">Browse…</button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Pages to convert</label>
+        <input type="text" id="range" placeholder="all pages"
+               value="${this.selectedPages.size === this.pdfTotal && this.pdfTotal > 0 ? '' : compressRanges([...this.selectedPages])}">
+        <div class="hint">Examples: <code>1-3, 5, 7-end</code> · leave blank for all · or click thumbnails</div>
+      </div>
+      <div class="form-group">
+        <label style="display:flex;align-items:center;gap:8px">
+          Format
+          <select id="format" style="width:auto;padding:4px 8px;font-size:12px;margin-left:auto">
+            <option value="jpg" ${this.format === 'jpg' ? 'selected' : ''}>JPG</option>
+            <option value="png" ${this.format === 'png' ? 'selected' : ''}>PNG</option>
+          </select>
+        </label>
+      </div>
+      <div class="form-group">
+        <label>Resolution (DPI)</label>
+        <input type="number" id="dpi" min="36" max="600" value="${this.dpi}">
+      </div>
+      <div class="form-group" id="quality-group"
+           style="${this.format === 'jpg' ? '' : 'display:none'}">
+        <label>Quality</label>
+        <div class="slider-row">
+          <input type="range" id="quality" min="1" max="100" value="${this.quality}">
+          <span class="slider-val" id="quality-val">${this.quality}%</span>
+        </div>
+      </div>
+    `;
+
+    $('#pdf-browse').addEventListener('click', () => this._browsePdf());
+    $('#range').addEventListener('input', e => this._onRangeInput(e.target.value));
+    $('#format').addEventListener('change', e => {
+      this.format = e.target.value;
+      $('#quality-group').style.display = this.format === 'jpg' ? '' : 'none';
+      this._scheduleEstimate();
+    });
+    $('#dpi').addEventListener('input', e => {
+      this.dpi = Math.max(36, Math.min(600, parseInt(e.target.value, 10) || 150));
+      this._scheduleEstimate();
+    });
+    const q = $('#quality');
+    if (q) q.addEventListener('input', () => {
+      this.quality = parseInt(q.value, 10);
+      $('#quality-val').textContent = this.quality + '%';
+      this._scheduleEstimate();
+    });
+
+    if (!this.pdfDoc) this.preview.showMessage('Browse for an input PDF to preview its pages');
+    else this._reloadPreview();
+  }
+
+  async _browsePdf() {
+    const [file] = await pickFiles({ accept: 'application/pdf,.pdf', multiple: false });
+    if (!file) return;
+    this.pdfFile = file;
+    this.pdfBuffer = await file.arrayBuffer();
+    $('#pdf-input').value = file.name;
+    showStatus('Loading PDF…', 'busy');
+    try {
+      this.pdfTotal = await pdfPageCountFromBuffer(this.pdfBuffer) || 0;
+      this.pdfDoc = await loadPdfJs(this.pdfBuffer);
+      this.selectedPages = new Set(
+        Array.from({ length: this.pdfTotal }, (_, i) => i + 1));
+      $('#range').value = '';
+      await this.preview.showPdf(this.pdfDoc, this.selectedPages);
+      showStatus('Ready', 'info');
+    } catch (e) {
+      showStatus('Could not read PDF: ' + e.message, 'error');
+      this.preview.showMessage('Could not read PDF');
+    }
+    this._scheduleEstimate();
+  }
+
+  _onRangeInput(value) {
+    if (this._updatingRange || !this.pdfTotal) return;
+    const pages = value.trim()
+      ? new Set(parseRange(value, this.pdfTotal))
+      : new Set(Array.from({ length: this.pdfTotal }, (_, i) => i + 1));
+    if (!pages.size) return;
+    this.selectedPages = pages;
+    this.preview.setSelection(pages);
+    this._scheduleEstimate();
+  }
+
+  _reloadPreview() {
+    if (!this.pdfDoc) return;
+    this.preview.showPdf(this.pdfDoc, this.selectedPages);
+  }
+
+  _onPreviewToggle(key, selected) {
+    if (this.direction === 'to_pdf') {
+      // key is image index
+      if (!(key >= 0 && key < this.images.length)) return;
+      if (selected) this.selectedImages.add(key);
+      else {
+        if (this.selectedImages.size <= 1) {
+          this.preview.setSelection(this.selectedImages);
+          return;
+        }
+        this.selectedImages.delete(key);
+      }
+      this._refreshImageList();
+    } else {
+      // key is 1-based page number
+      if (selected) this.selectedPages.add(key);
+      else {
+        if (this.selectedPages.size <= 1) {
+          this.preview.setSelection(this.selectedPages);
+          return;
+        }
+        this.selectedPages.delete(key);
+      }
+      this._updatingRange = true;
+      $('#range').value = this.selectedPages.size === this.pdfTotal
+        ? '' : compressRanges([...this.selectedPages]);
+      this._updatingRange = false;
+    }
+    this._scheduleEstimate();
+  }
+
+  async _estimate() {
+    const estEl = $('#convert-est');
+    if (!estEl) return;
+    estEl.textContent = 'Estimating…';
+    try {
+      if (this.direction === 'to_pdf') {
+        const sel = [...this.selectedImages].map(i => this.images[i]);
+        if (!sel.length) { estEl.textContent = '—'; return; }
+        const f = sel[0];
+        const bitmap = await createImageBitmap(f);
+        const canvas = document.createElement('canvas');
+        canvas.width = bitmap.width; canvas.height = bitmap.height;
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = 'white'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(bitmap, 0, 0);
+        const blob = await new Promise(r => canvas.toBlob(r, 'image/jpeg', this.quality / 100));
+        const buf = await blob.arrayBuffer();
+        const mini = await PDFLib.PDFDocument.create();
+        const img = await mini.embedJpg(buf);
+        const page = mini.addPage([canvas.width, canvas.height]);
+        page.drawImage(img, { x: 0, y: 0, width: canvas.width, height: canvas.height });
+        const bytes = await mini.save();
+        estEl.textContent = '~' + humanSize(bytes.length * sel.length);
+      } else {
+        if (!this.pdfDoc || !this.selectedPages.size) { estEl.textContent = '—'; return; }
+        const firstPage = Math.min(...this.selectedPages);
+        const page = await this.pdfDoc.getPage(firstPage);
+        const viewport = page.getViewport({ scale: this.dpi / 72 });
+        const canvas = document.createElement('canvas');
+        canvas.width = Math.floor(viewport.width);
+        canvas.height = Math.floor(viewport.height);
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = 'white'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+        await page.render({ canvasContext: ctx, viewport }).promise;
+        const mime = this.format === 'png' ? 'image/png' : 'image/jpeg';
+        const blob = await new Promise(r => canvas.toBlob(r, mime, this.quality / 100));
+        estEl.textContent = '~' + humanSize(blob.size * this.selectedPages.size);
+      }
+    } catch (e) {
+      estEl.textContent = '—';
+    }
+  }
+
+  async _run() {
+    if (this.direction === 'to_pdf') await this._runToPdf();
+    else await this._runToImage();
+  }
+
+  async _runToPdf() {
+    const sel = [...this.selectedImages].map(i => this.images[i]);
+    if (!sel.length) { toast('Select at least one image.'); return; }
+    const outName = $('#out-name').value.trim() || 'output.pdf';
+    showStatus(`Converting ${sel.length} image(s) → PDF…`, 'busy');
+    showProgress(true);
+    try {
+      const outDoc = await PDFLib.PDFDocument.create();
+      for (let i = 0; i < sel.length; i++) {
+        const f = sel[i];
+        showStatus(`Processing image ${i + 1}/${sel.length}…`, 'busy');
+        const bitmap = await createImageBitmap(f);
+        const canvas = document.createElement('canvas');
+        canvas.width = bitmap.width; canvas.height = bitmap.height;
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = 'white'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(bitmap, 0, 0);
+
+        let embedBytes;
+        const isPng = f.type === 'image/png';
+        const isJpg = f.type === 'image/jpeg';
+
+        if (this.quality === 100 && (isPng || isJpg)) {
+          embedBytes = await f.arrayBuffer();
+          const img = isPng
+            ? await outDoc.embedPng(embedBytes)
+            : await outDoc.embedJpg(embedBytes);
+          const [w, h] = this._fitPage(canvas.width, canvas.height);
+          const page = outDoc.addPage([w, h]);
+          page.drawImage(img, { x: 0, y: 0, width: w, height: h });
+        } else {
+          const blob = await new Promise(r => canvas.toBlob(r, 'image/jpeg', this.quality / 100));
+          const buf = await blob.arrayBuffer();
+          const img = await outDoc.embedJpg(buf);
+          const [w, h] = this._fitPage(canvas.width, canvas.height);
+          const page = outDoc.addPage([w, h]);
+          page.drawImage(img, { x: 0, y: 0, width: w, height: h });
+        }
+      }
+      const bytes = await outDoc.save();
+      downloadBlob(new Blob([bytes], { type: 'application/pdf' }), outName);
+      showStatus(`Saved ${outName}`, 'success');
+    } catch (e) {
+      console.error(e);
+      showStatus('Conversion failed: ' + e.message, 'error');
+      toast('Conversion failed: ' + e.message);
+    } finally {
+      showProgress(false);
+    }
+  }
+
+  _fitPage(w, h) {
+    const MAX = 1440;
+    if (w <= MAX && h <= MAX) return [w, h];
+    const scale = MAX / Math.max(w, h);
+    return [w * scale, h * scale];
+  }
+
+  async _runToImage() {
+    if (!this.pdfDoc) { toast('Choose a PDF first.'); return; }
+    const pages = [...this.selectedPages].sort((a, b) => a - b);
+    if (!pages.length) { toast('Select at least one page.'); return; }
+    showStatus(`Converting ${pages.length} page(s) → images…`, 'busy');
+    showProgress(true);
+    try {
+      const results = [];
+      for (let i = 0; i < pages.length; i++) {
+        const pn = pages[i];
+        showStatus(`Rendering page ${pn} (${i + 1}/${pages.length})…`, 'busy');
+        const page = await this.pdfDoc.getPage(pn);
+        const viewport = page.getViewport({ scale: this.dpi / 72 });
+        const canvas = document.createElement('canvas');
+        canvas.width = Math.floor(viewport.width);
+        canvas.height = Math.floor(viewport.height);
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = 'white';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        await page.render({ canvasContext: ctx, viewport }).promise;
+        const mime = this.format === 'png' ? 'image/png' : 'image/jpeg';
+        const blob = await new Promise(r => canvas.toBlob(r, mime, this.quality / 100));
+        results.push({ pageNum: pn, blob });
+      }
+
+      if (results.length === 1) {
+        const r = results[0];
+        downloadBlob(r.blob, `page-${r.pageNum}.${this.format}`);
+        showStatus('Saved 1 image', 'success');
+      } else if (typeof JSZip === 'undefined') {
+        // Fallback: download sequentially
+        for (const r of results) {
+          downloadBlob(r.blob, `page-${r.pageNum}.${this.format}`);
+          await new Promise(res => setTimeout(res, 250));
+        }
+        showStatus(`Saved ${results.length} images individually`, 'success');
+      } else {
+        const zip = new JSZip();
+        const stem = this.pdfFile.name.replace(/\.pdf$/i, '');
+        for (const r of results) {
+          zip.file(`${stem}-page-${String(r.pageNum).padStart(3, '0')}.${this.format}`, r.blob);
+        }
+        const zipBlob = await zip.generateAsync({ type: 'blob' });
+        downloadBlob(zipBlob, `${stem}-pages.zip`);
+        showStatus(`Saved ${results.length} images as zip`, 'success');
+      }
+    } catch (e) {
+      console.error(e);
+      showStatus('Conversion failed: ' + e.message, 'error');
+      toast('Conversion failed: ' + e.message);
+    } finally {
+      showProgress(false);
+    }
+  }
+}
+
+// ════════════════════════════════════════════════════════════════
+//  Tabs & init
+// ════════════════════════════════════════════════════════════════
+$$('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    $$('.tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    $$('.pane').forEach(p => p.classList.remove('active'));
+    document.getElementById(`pane-${tab.dataset.pane}`).classList.add('active');
+  });
+});
+
+const combineTab = new CombineTab();
+const extractTab = new ExtractTab();
+const convertTab = new ConvertTab();
+
+window.addEventListener('beforeunload', e => {
+  if (combineTab.rows.length || extractTab.pdfDoc ||
+      convertTab.images.length || convertTab.pdfDoc) {
+    e.preventDefault();
+    e.returnValue = '';
+  }
+});
+</script>
+</body>
+</html>
